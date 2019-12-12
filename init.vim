@@ -20,21 +20,39 @@ call plug#begin()
 
 "Colors!
 	Plug 'itchyny/lightline.vim'
+	Plug 'morhetz/gruvbox'
+	Plug 'tlhr/anderson.vim'
+	Plug 'ludokng/vim-odyssey'
+	Plug 'w0ng/vim-hybrid'
 
 call plug#end()
 
+" C stuff:
+augroup project
+  autocmd!
+  autocmd BufRead,BufNewFile *.h,*.c set filetype=c.doxygen
+augroup END
+
+set exrc
+set secure
+
+
 set nohlsearch
 set clipboard+=unnamedplus
+"let g:gruvbox_contrast_dark = 'soft'
+
 
 " Some basics:
 	set nocompatible
 	filetype plugin on
 	syntax on
 	set encoding=utf-8
-	colorscheme elflord
+	colorscheme odyssey
 	set number
 	set noswapfile
 	set nofoldenable
+	set ts=4 sw=4
+
 " Enable autocompletion on command line:
 	set wildmode=longest,list,full
 " Disables automatic commenting on newline:
@@ -107,8 +125,8 @@ set clipboard+=unnamedplus
 " Delete into blackhole register to preserve clipboard contents
 	nnoremap d "_d
 	vnoremap d "_d
-	nnoremap D "_D
-	vnoremap D "_D
+	"nnoremap D "_D
+	"vnoremap D "_D
 
 " Paste removing newlines (WIP)
 	"nnoremap P
@@ -133,6 +151,7 @@ set clipboard+=unnamedplus
 " Hotkeys for quickly saving documents and remapping
 	inoremap jk <Esc>
 	noremap <leader><CR> :w!<cr>
+	noremap <leader><BS> :q<cr>
 
 " Export text under the cursor
 	noremap <leader>E :w! >><Space>
@@ -199,7 +218,7 @@ set clipboard+=unnamedplus
 
 """ C
 	autocmd FileType c,h setlocal cindent shiftwidth=4 expandtab """tabstop=4 shiftwidth=4 softtabstop=4
-
+	autocmd Filetype c,h nnoremap <C><CR> :make!<cr>
 "" html
 	autocmd FileType html,css,html.tmpl setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
  "____        _                  _
@@ -221,7 +240,7 @@ set clipboard+=unnamedplus
 	autocmd FileType tex inoremap ,sec \section{}<Enter><Enter><++><Esc>2kf}i
 	autocmd FileType tex inoremap ,ssec \subsection{}<Enter><Enter><++><Esc>2kf}i
 	autocmd FileType tex inoremap ,sssec \subsubsection{}<Enter><Enter><++><Esc>2kf}i
-	autocmd FileType tex inoremap ,fig \begin{figure}[h!]<Enter><Enter>\includegraphics[<++>]{<++>}<Enter><Enter>\end{figure}<Enter><Esc>6kfi
+	autocmd FileType tex inoremap ,fig \begin{figure}[h!]<Enter><Enter>\centering<Enter>\includegraphics[width=<++>\textwidth,height=<++>\textheight]{<++>}<Enter>\caption{<++>}<Enter><Enter>\end{figure}<Enter><Esc>6kfi
 	" Beamer
 	autocmd FileType tex inoremap ,fr \begin{frame}[t]{<++>}<Enter><++><Enter><Enter>\end{frame}<Enter><Enter><++>
 	autocmd FileType tex inoremap ,tk \begin{tikzpicture}<Enter>\draw <++><Enter>\end{tikzpicture}<Enter><++><Esc>6kf}i
