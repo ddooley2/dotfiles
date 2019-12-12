@@ -1,12 +1,12 @@
-!Iceberg theme
+!!Iceberg theme
 
-*.foreground: 	#c6c8d1
-*.background:   #4B4B4C
+*.foreground:   #c6c8d1
+*.background:   #161821
 *.cursorColor:  #c6c8d1
 
 ! black
 *.color0:       #161821
-*.color8:       #4B4B4C
+*.color8:       #6b7089
 
 ! red
 *.color1:       #e27878
@@ -35,6 +35,7 @@
 ! white
 *.color7:       #c6c8d1
 *.color15:      #d2d4de
+
 
 !! Transparency (0-1):
 !! Set a default font and font size as below:
