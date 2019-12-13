@@ -19,6 +19,7 @@ set $hibernate sudo -A systemctl suspend
 # Misc.
 default_border none
 default_border pixel 0
+for_window [class=".*"] split toggle
 # Locker settings
 set $Locker blurlock
 exec --no-startup-id xautolock -time 120 -locker blurlock
@@ -95,7 +96,7 @@ bar {
       			inactive_workspace $darkblack $darkblack $white
         		urgent_workspace   $darkblack $darkblack $white
 		}
-	status_command i3blocks
+	status_command i3status
 	position bottom
 	mode dock
 	modifier None
