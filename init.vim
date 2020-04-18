@@ -8,8 +8,8 @@ call plug#begin()
 	Plug 'matze/vim-tex-fold'
 "Coding
 	Plug 'heavenshell/vim-pydocstring' " this can be replaced by a snippet plugin
-	Plug 'davidhalter/jedi-vim' "This plugin can be annoying
 	Plug 'ervandew/supertab'
+	Plug 'ycm-core/YouCompleteMe' " This is for coding auto-completion features
 
 "General
 	Plug 'vimwiki/vimwiki'
@@ -32,6 +32,13 @@ augroup project
   autocmd!
   autocmd BufRead,BufNewFile *.h,*.c set filetype=c.doxygen
 augroup END
+
+" VSCode stuff
+if exists('g:vscode')
+    " VSCode extension
+else
+    " ordinary neovim
+endif
 
 set exrc
 set secure
@@ -258,6 +265,15 @@ set clipboard+=unnamedplus
 	autocmd FileType tex vnoremap , <ESC>`<i\{<ESC>`>2la}<ESC>?\\{<Enter>a
 	autocmd FileType tex inoremap ,tab \begin{tabular}<Enter><++><Enter>\end{tabular}<Enter><Enter><++><Esc>4kA{}<Esc>i
 	autocmd FileType tex inoremap ,- \item<Space>
+
+	function! WC()
+		let filename = expand("%")
+		let cmd = "detex " . filename . " | wc -w | tr -d [:space:]"
+		let result = system(cmd)
+		echo result . " words"
+	endfunction
+
+	command WC call WC()
 
 "MARKDOWN
 	autocmd Filetype markdown,rmd map <leader>w yiWi[<esc>Ea](<esc>pa)

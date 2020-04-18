@@ -19,7 +19,7 @@ set $hibernate sudo -A systemctl suspend
 # Misc.
 default_border none
 default_border pixel 0
-for_window [class=".*"] split toggle
+#for_window [class=".*"] split toggle
 # Locker settings
 set $Locker blurlock
 exec --no-startup-id xautolock -time 120 -locker blurlock
@@ -42,7 +42,7 @@ bindsym $mod+0 mode "$mode_system"
 
 # #---Starting External Scripts---# #
 # Setting the background:
-exec --no-startup-id feh --randomize --bg-scale ~/Documents/Starz/*.jpg
+exec --no-startup-id feh --randomize --bg-scale ~/Documents/Wallpapers/*.jpg
 # Starts dunst for notifications:
 exec --no-startup-id dunst
 # Composite manager:
