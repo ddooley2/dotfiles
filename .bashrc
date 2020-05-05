@@ -141,12 +141,12 @@ ex ()
 # Set vars
 export VISUAL="$EDITOR"
 export EDITOR="nvim"
-export TERM="urxvt"
+export TERM="xterm"
 export BROWSER="/usr/bin/google-chrome-stable"
 export READER="zathura"
 export GTK2_RC_FILES="$HOME/.config/gtk-2.0/gtkrc-2.0"
 export COLORTERM=$TERM
-
 export PATH="$PATH:$(du "$HOME/scripts/" | cut -f2 | tr '\n' ':')"
+export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
-[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
+[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx && exec `feh --randomize --bg-scale /home/ddooley/Documents/Wallpapers`

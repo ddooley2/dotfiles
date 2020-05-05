@@ -11,12 +11,14 @@ done
 unset f
 fi
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
-sleep 2 && nitrogen --restore &
 urxvt -q -o -f &
-compton n% &
 autocutsel -fork &
 autocutsel -selection PRIMARY -fork &
 /usr/bin/start-pulseaudio-x11 &
+#eval `cat ~/.fehbg`
+eval `feh --randomize --bg-scale /home/ddooley/Documents/Wallpapers`
+#eval `sudo rmmod pcspkr`
+
 
 exec i3
 

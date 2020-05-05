@@ -8,13 +8,14 @@ export LC_ALL=en_US.UTF-8
 # General
 export VISUAL="$EDITOR"
 export EDITOR="nvim"
-export TERM="urxvt"
+export TERM="xterm"
 export BROWSER="/usr/bin/google-chrome-stable"
 export READER="zathura"
 export GTK2_RC_FILES="$HOME/.config/gtk-2.0/gtkrc-2.0"
 export COLORTERM=$TERM
 
-# Specific to my config
+
+#Specific to my config
 export PATH="$PATH:$(du "$HOME/scripts/" | cut -f2 | tr '\n' ':')"  # Adds `~/scripts` and all subdirectories to $PATH
 
 # less/man colors
