@@ -9,7 +9,8 @@ call plug#begin()
 "Coding
 	Plug 'heavenshell/vim-pydocstring' " this can be replaced by a snippet plugin
 	Plug 'ervandew/supertab'
-	Plug 'ycm-core/YouCompleteMe' " This is for coding auto-completion features
+"	Plug 'ycm-core/YouCompleteMe' " This is for coding auto-completion features
+	Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 "General
 	Plug 'vimwiki/vimwiki'
@@ -65,6 +66,20 @@ set clipboard+=unnamedplus
 " Disables automatic commenting on newline:
 	autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
+" Mappings for split windows:
+	map <C-h> <C-w>h
+	map <C-j> <C-w>j
+	map <C-k> <C-w>k
+	map <C-l> <C-w>l
+
+" Mappings for tabs:
+	map tk :tabr<cr>
+	map tj :tabl<cr>
+	map th :tabp<cr>
+	map tl :tabn<cr>
+" Select one word on cursor:
+	noremap <leader>c yiw
+	noremap <leader>x diw
 " Navigating with guides
 	inoremap <leader><leader> <Esc>/<++><Enter>"_c4l
 	vnoremap <leader><leader> <Esc>/<++><Enter>"_c4l
@@ -88,23 +103,18 @@ set clipboard+=unnamedplus
 " Splits open at the bottom and right, which is non-retarded, unlike vim defaults.
 	set splitbelow splitright
 
-" Shortcutting split navigation, saving a keypress:
-	map <C-h> <C-w>h
-	map <C-j> <C-w>j
-	map <C-k> <C-w>k
-	map <C-l> <C-w>l
-
 " Check file in shellcheck:
 	map <leader>h :!clear && shellcheck %<CR>
 
 " Open my bibliography file in split
 	map <leader>b :vsp<space>$BIB<CR>
 
+
 " Replace all is aliased to S.
 	nnoremap S :%s//g<Left><Left>
 
 " Compile document, be it groff/LaTeX/markdown/etc.
-	map <leader>c :w! \| !compiler <c-r>%<CR><CR>
+	map <leader>q :w! \| !compiler <c-r>%<CR><CR>
 	"map <leader>c :AsyncRun compiler % <cr>
 " Compile document, but turn modifier to 1 (e.g. compile .md as slides).
 	map <leader>k :w! \| !compiler <c-r>% 1<CR><CR>
@@ -130,8 +140,8 @@ set clipboard+=unnamedplus
 	noremap <C-p> "+p
 
 " Delete into blackhole register to preserve clipboard contents
-	nnoremap d "_d
-	vnoremap d "_d
+"	nnoremap d "_d
+"	vnoremap d "_d
 	"nnoremap D "_D
 	"vnoremap D "_D
 
@@ -214,8 +224,8 @@ set clipboard+=unnamedplus
     	let g:tex_fold_additional_envs = ['abstract']
 	autocmd FileType tex setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
 	" Compilation
-	autocmd FileType tex map <leader>c :AsyncRun latexmk -pdf -pvc % <cr>
-	map <leader>c :w! \| !compiler <c-r>%<CR><CR>
+	autocmd FileType tex map <leader>q :AsyncRun latexmk -pdf -pvc % <cr>
+	map <leader>q :w! \| !compiler <c-r>%<CR><CR>
 
 """ Python
 	" Docstrings
@@ -239,6 +249,7 @@ set clipboard+=unnamedplus
 	" General snippets
 	autocmd FileType tex inoremap ,em \emph{}<++><Esc>T{i
 	autocmd FileType tex inoremap ,bf \textbf{}<++><Esc>T{i
+	autocmd FileType tex inoremap ,ci \cite{}<++><Esc>T{i
 	autocmd FileType tex inoremap ,it \textit{}<++><Esc>T{i
 	autocmd FileType tex inoremap ,hl \hl{}<++><Esc>T{i
 	autocmd FileType tex inoremap ,ol \begin{enumerate}<Enter><Enter>\end{enumerate}<Enter><Enter><++><Esc>3kA\item<Space>
