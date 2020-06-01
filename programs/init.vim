@@ -18,7 +18,8 @@ call plug#begin()
 
 "Syntax
 	Plug 'vifm/vifm.vim'
-
+	Plug 'dkarter/bullets.vim'
+	Plug 'aserebryakov/vim-todo-lists'
 "Colors!
 	Plug 'itchyny/lightline.vim'
 	Plug 'morhetz/gruvbox'
@@ -112,6 +113,8 @@ set clipboard+=unnamedplus
 
 " Replace all is aliased to S.
 	nnoremap S :%s//g<Left><Left>
+" Count a pattern is aliased to C.
+	nnoremap C :%s///gn<Left><Left><Left><Left>
 
 " Compile document, be it groff/LaTeX/markdown/etc.
 	map <leader>q :w! \| !compiler <c-r>%<CR><CR>
