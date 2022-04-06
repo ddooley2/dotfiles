@@ -1,240 +1,227 @@
 let mapleader =" "
 
-set visualbell
+" https://gist.github.com/miguelgrinberg/527bb5a400791f89b3c4da4bd61222e4
+" plugins
+let need_to_install_plugins = 0
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    let need_to_install_plugins = 1
+endif
 
 call plug#begin()
-"Prose
-	Plug 'junegunn/goyo.vim'
-	Plug 'matze/vim-tex-fold'
-"Coding
-	Plug 'heavenshell/vim-pydocstring' " this can be replaced by a snippet plugin
-	Plug 'ervandew/supertab'
-"	Plug 'ycm-core/YouCompleteMe' " This is for coding auto-completion features
-	Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Sensuble defaults
+Plug 'tpope/vim-sensible'
 
-"General
-	Plug 'vimwiki/vimwiki'
-	Plug 'skywind3000/asyncrun.vim' "Run compilation in the background
+" Commenting extension
+Plug 'tpope/vim-commentary'
 
-"Syntax
-	Plug 'vifm/vifm.vim'
-	Plug 'dkarter/bullets.vim'
-	Plug 'aserebryakov/vim-todo-lists'
-"Colors!
-	Plug 'itchyny/lightline.vim'
-	Plug 'morhetz/gruvbox'
-	Plug 'tlhr/anderson.vim'
-	Plug 'ludokng/vim-odyssey'
-	Plug 'w0ng/vim-hybrid'
+" File browser with git indicators
+Plug 'preservim/nerdtree'
+Plug 'vim-scripts/The-NERD-tree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+
+" Tabs
+Plug 'jistr/vim-nerdtree-tabs'
+
+" git indicator in editor
+Plug 'airblade/vim-gitgutter'
+
+" Status bar
+Plug 'itchyny/lightline.vim'
+
+" Themes 
+Plug 'arcticicestudio/nord-vim'
+Plug 'morhetz/gruvbox'
+Plug 'tlhr/anderson.vim'
+Plug 'ludokng/vim-odyssey'
+Plug 'dracula/vim'
+Plug 'joshdick/onedark.vim'
+
+" Tabs
+Plug 'ap/vim-buftabline'
+
+" Vimtex
+Plug 'lervag/vimtex'
+
+" Telescope file finder / picker
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+
+" neovim language things
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':SUpdate'}
+Plug 'neovim/nvim-lspconfig'
+Plug 'williamboman/nvim-lsp-installer'
+Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
+" lua & third party sources -- See https://github.com/ms-jpq/coq.thirdparty
+" Need to **configure separately**
+
+" Nicer LSP UI
+Plug 'tami5/lspsaga.nvim', {'branch' : 'nvim6.0'}
+
+" Asynchronous shell scripts
+Plug 'skywind3000/asyncrun.vim'
 
 call plug#end()
 
-" C stuff:
-augroup project
-  autocmd!
-  autocmd BufRead,BufNewFile *.h,*.c set filetype=c.doxygen
-augroup END
+filetype plugin indent on
+syntax on
 
-" VSCode stuff
-if exists('g:vscode')
-    " VSCode extension
-else
-    " ordinary neovim
-endif
+" Vimtex Stuff
+" This enables Vim's and neovim's syntax-related features. Without this, some
+" VimTeX features will not work (see ":help vimtex-requirements" for more
+" info).
+syntax enable
+let g:vimtex_view_method = 'zathura'
 
-set exrc
-set secure
+" Viewer options: One may configure the viewer either by specifying a built-in
+" viewer method:
+" Or with a generic interface:
+"let g:vimtex_view_general_viewer = 'okular'
+"let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
 
+" VimTeX uses latexmk as the default compiler backend. If you use it, which is
+" strongly recommended, you probably don't need to configure anything. If you
+" want another compiler backend, you can change it as follows. The list of
+" supported backends and further explanation is provided in the documentation,
+" see ":help vimtex-compiler".
+let g:vimtex_compiler_method = 'latexmk'
+" Most VimTeX mappings rely on localleader and this can be changed with the
+" following line. The default is usually fine and is the symbol "\".
+let maplocalleader = ","
 
-set nohlsearch
 set clipboard+=unnamedplus
-"let g:gruvbox_contrast_dark = 'soft'
 
-
-" Some basics:
-	set nocompatible
-	filetype plugin on
-	syntax on
-	set encoding=utf-8
-	colorscheme odyssey
-	set number
-	set noswapfile
-	set nofoldenable
-	set ts=4 sw=4
-
-" Enable autocompletion on command line:
-	set wildmode=longest,list,full
 " Disables automatic commenting on newline:
-	autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
-" Mappings for split windows:
-	map <C-h> <C-w>h
-	map <C-j> <C-w>j
-	map <C-k> <C-w>k
-	map <C-l> <C-w>l
-
-" Mappings for tabs:
-	map tk :tabr<cr>
-	map tj :tabl<cr>
-	map th :tabp<cr>
-	map tl :tabn<cr>
+  autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 " Select one word on cursor:
-	noremap <leader>c yiw
-	noremap <leader>x diw
+  noremap <leader>c yiw
+  noremap <leader>x diw
+              
+" Insert newline without going into insert mode
+  nnoremap <CR> o<Esc>k
+  nnoremap <BS> O<Esc>j
+
+" Replace all aliased to S
+  nnoremap S :%s//g<Left><Left>
+" Count pattern aliased to C
+  nnoremap C :%s///gn<Left>Left><Left><Left>
+
+" Copy selected text to system clipboard
+  noremap <C-c> "+y
+  noremap <C-p> "+p
+
+" Hotkeys for quickly saving and exiting documents and remapping
+ inoremap jk <Esc>
+ noremap <leader><CR> :wq<cr>
+" noremap <leader><CR> :w!<cr>
+" noremap <leader><BS> :q<cr>
+
+" Map to disable vims evil autoindent (currenlty used in latex)
+	nnoremap <F8> :setl noai nocin nosi inde=<CR>
+
 " Navigating with guides
 	inoremap <leader><leader> <Esc>/<++><Enter>"_c4l
 	vnoremap <leader><leader> <Esc>/<++><Enter>"_c4l
 	map <leader><leader> <Esc>/<++><Enter>"_c4l
 
-" Toggle line number
-	map <leader>1 :set invnumber invrelativenumber <CR>
 
-" Goyo plugin makes text more readable when writing prose:
-	map <leader>f :Goyo \| set linebreak<CR>
+if need_to_install_plugins == 1
+    echo "Installing plugins..."
+    silent! PlugInstall
+    echo "Done!"
+    q
+endif
 
-" Spell-check set to <leader>o, 'o' for 'orthography':
-	map <leader>o :setlocal spell! spelllang=en_us<CR> | hi clear SpellBad | hi SpellBad cterm=underline
+" gfiles shortcut
+nnoremap <C-f> <cmd>Telescope find_files<cr>
+nnoremap <C-g> <cmd>Telescope git_files<cr>
 
-" Insert new line above without going into insert mode
-" (uses mark o to return to the previous cursor column)
- 	nnoremap <CR> o<Esc>k
- 	nnoremap <BS> O<Esc>j
+" always show the status bar
+set laststatus=2
 
+" enable 256 colors
+set t_Co=256
+set t_ut=
 
-" Splits open at the bottom and right, which is non-retarded, unlike vim defaults.
-	set splitbelow splitright
+" turn on line numbering
+set number
 
-" Check file in shellcheck:
-	map <leader>h :!clear && shellcheck %<CR>
+" sane text files
+set fileformat=unix
+set encoding=utf-8
+set fileencoding=utf-8
 
-" Open my bibliography file in split
-	map <leader>b :vsp<space>$BIB<CR>
+" sane editing
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set autoindent
+set smartindent
 
+" word movement
+imap <S-Left> <Esc>bi
+nmap <S-Left> b
+imap <S-Right> <Esc><Right>wi
+nmap <S-Right> w
 
-" Replace all is aliased to S.
-	nnoremap S :%s//g<Left><Left>
-" Count a pattern is aliased to C.
-	nnoremap C :%s///gn<Left><Left><Left><Left>
+" indent/unindent with tab/shift-tab
+nmap <Tab> >>
+imap <S-Tab> <Esc><<i
+nmap <S-tab> <<
 
-" Compile document, be it groff/LaTeX/markdown/etc.
-	map <leader>q :w! \| !compiler <c-r>%<CR><CR>
-	"map <leader>c :AsyncRun compiler % <cr>
-" Compile document, but turn modifier to 1 (e.g. compile .md as slides).
-	map <leader>k :w! \| !compiler <c-r>% 1<CR><CR>
-	map <leader>p :!opout <c-r>%<CR><CR>
+" mouse
+set mouse=a
+let g:is_mouse_enabled = 1
+noremap <silent> <Leader>m :call ToggleMouse()<CR>
+function ToggleMouse()
+    if g:is_mouse_enabled == 1
+        echo "Mouse OFF"
+        set mouse=
+        let g:is_mouse_enabled = 0
+    else
+        echo "Mouse ON"
+        set mouse=a
+        let g:is_mouse_enabled = 1
+    endif
+endfunction
 
-" Runs a script that cleans out tex build files whenever I close out of a .tex file.
-	autocmd VimLeave *.tex !texclear %
+" color scheme
+syntax on
+colorscheme gruvbox 
+filetype on
+filetype plugin indent on
 
-" Ensure files are read as what I want:
-	let g:vimwiki_ext2syntax = {'.Rmd': 'markdown', '.rmd': 'markdown','.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
-	autocmd BufRead,BufNewFile /tmp/calcurse*,~/.calcurse/notes/* set filetype=markdown
-	autocmd BufRead,BufNewFile *.ms,*.me,*.mom,*.man set filetype=groff
-	autocmd BufRead,BufNewFile *.tex,*.cls set filetype=tex
+" lightline
+set noshowmode
+let g:lightline = { 'colorscheme': 'gruvbox' }
 
-	autocmd BufRead,BufNewFile *.sh set filetype=sh
-
-" Use urlscan to choose and open a url:
-	:noremap <leader>u :w<Home> !urlscan -r 'linkhandler {}'<CR>
-	:noremap ,, !urlscan -r 'linkhandler {}'<CR>
-
-" Copy selected text to system clipboard (requires gvim/nvim/vim-x11 installed):
-	noremap <C-c> "+y
-	noremap <C-p> "+p
-
-" Delete into blackhole register to preserve clipboard contents
-"	nnoremap d "_d
-"	vnoremap d "_d
-	"nnoremap D "_D
-	"vnoremap D "_D
-
-" Paste removing newlines (WIP)
-	"nnoremap P
-
-" Enable Goyo by default for mutt writting
-	" Goyo's width will be the line limit in mutt.
-	autocmd BufRead,BufNewFile /tmp/neomutt* let g:goyo_width=80
-	autocmd BufRead,BufNewFile /tmp/neomutt* :Goyo
-
-" Automatically deletes all trailing whitespace on save.
-	autocmd BufWritePre * %s/\s\+$//e
-
-" When shortcut files are updated, renew bash and vifm configs with new material:
-	autocmd BufWritePost ~/.bm* !shortcuts
-
-" Run xrdb whenever Xdefaults or Xresources are updated.
-	autocmd BufWritePost ~/.Xresources,~/.Xdefaults !xrdb
-
-" Update bibliography copies when parent is modified.
-	autocmd BufWritePost $BIB !bib-update
-
-" Hotkeys for quickly saving documents and remapping
-	inoremap jk <Esc>
-	noremap <leader><CR> :w!<cr>
-	noremap <leader><BS> :q<cr>
-
-" Export text under the cursor
-	noremap <leader>E :w! >><Space>
-
-" Export text under the cursor and delete
-	command! -range=% -nargs=1 -complete=file MoveTo
-	        \ <line1>,<line2>write! >> <args> | <line1>,<line2>d_
-	xnoremap <leader>e :MoveTo<Space>
-	nnoremap <leader>e :MoveTo<Space>
-
-" Map to disable vims evil autoindent (currenlty used in latex)
-	nnoremap <F8> :setl noai nocin nosi inde=<CR>
-
-" Replacing under the cursor
-	nnoremap <leader>r :%s/\<<C-r><C-w>\>//gc<left><left><left>
-	"" The line below to add external functions (lh#visual#selection()
-	"" vnoremap <leader>r <c-\><c-n>:let @/ .= '\\|'.escape(lh#visual#selection(), '/\^$*.[~')<cr>n
-
-" SuperTab pluggin
-	runtime! plugin/supertab.vim
-	inoremap <s-tab> <tab>
-	let g:SuperTabMappingTabLiteral = '<s-tab>'
-	let g:SuperTabNoCompleteAfter = ['\s', '&']
-	let g:SuperTabNoCompleteBefore = ['&']
-
-" Case insensitive search with no capital while case sensitive search when captial is present
-	set smartcase
-	set ignorecase
-
-" Other
-	set undofile " persitent undo
-	set inccommand=nosplit " show real time changes to ex command
-	set statusline=%<%f%=%-14.(%)%l\ " status
-	nnoremap Q @@ " Instead of stumbling into ex mode, repeat the last macro used.
-"  More intersting maps:
-" https://www.hillelwayne.com/post/intermediate-vim/
-" e.g., navigate long lines with j and k or set maps easily
-
-" Indentation document
-	nnoremap <leader>i mc gg=G `c
-
-" Async run (see more useful guides at the plugin page)
-" Toggle quickfix window
-	"nnoremap <leader>v :call asyncrun#quickfix_toggle(10)<CR> <C-w>j G <C-w>k
-
-
+" code folding
+set foldmethod=indent
+set foldlevel=99
 "" Language-specific
 """" LaTeX
+
+    " Runs a script that cleans out tex build files whenever I close out of a .tex file.
+	autocmd VimLeave *.tex !texclear_mac -f % .
+
 	" Word count:
-	autocmd FileType tex map <leader>w :w !detex \| wc -w<CR>
+	autocmd FileType tex map ,wc :w !detex \| wc -w<CR>
 	" Folding
 	autocmd FileType tex nnoremap fs <Space> za
     	let g:tex_fold_additional_envs = ['abstract']
 	autocmd FileType tex setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
 	" Compilation
-	autocmd FileType tex map <leader>q :AsyncRun latexmk -pdf -pvc % <cr>
-	map <leader>q :w! \| !compiler <c-r>%<CR><CR>
+"	autocmd FileType tex map <leader>q :AsyncRun latexmk -pdf -pvc % <cr>
+	map <leader>q :w! \| !compiler_mac <c-r>%<CR><CR>
+	map <leader>p :!opout <c-r>%<CR><CR>
 
 """ Python
 	" Docstrings
 	autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
-	let g:pydocstring_templates_dir = '/home/sg/.vim/vim-pydocstring-templates/numpy'
-	autocmd FileType python nmap <silent> <C-d> <Plug>(pydocstring) <bar> 2kA<Space>
 
 """ C
 	autocmd FileType c,h setlocal cindent shiftwidth=4 expandtab """tabstop=4 shiftwidth=4 softtabstop=4
@@ -249,6 +236,10 @@ set clipboard+=unnamedplus
               "|_|   |_|
 
 """LaTeX
+    " Automatic new line every 80 chars 
+    autocmd FileType txt,markdown,tex set colorcolumn=80
+    autocmd FileType txt,markdown,tex set viminfo='25,\"50,n~/.viminfo
+    autocmd FileType txt,markdown,tex set tw=79
 	" General snippets
 	autocmd FileType tex inoremap ,em \emph{}<++><Esc>T{i
 	autocmd FileType tex inoremap ,bf \textbf{}<++><Esc>T{i
@@ -308,12 +299,168 @@ set clipboard+=unnamedplus
 	autocmd Filetype markdown,rmd inoremap ,cl ``<++><Esc>F`i
 	autocmd Filetype markdown,rmd inoremap ,cb ~~~<Enter><Enter>~~~<Enter><++><Esc>2ki
 
-""" Python
-	autocmd FileType python inoremap ,db __import__('pdb').set_trace()
-	autocmd Filetype python inoremap ,sb #!/usr/bin/env python3<Enter>
+	autocmd Filetype markdown,rmd inoremap ,ul $\mu L$<Space><Esc>i
+	autocmd Filetype markdown,rmd inoremap ,um $\mu m$<Space><Esc>i
+	autocmd Filetype markdown,rmd inoremap ,ug $\mu L$<Space><Esc>i
+	autocmd Filetype markdown,rmd inoremap ,uM $\mu M$<Space><Esc>i
+	autocmd Filetype markdown,rmd inoremap ,mu $\mu$<Space><Esc>i
+	autocmd Filetype markdown,rmd inoremap ,phi $\phi$<Space><Esc>i
+	autocmd Filetype markdown,rmd inoremap ,alp $\alpha$<Space><Esc>i
+	autocmd Filetype markdown,rmd inoremap ,beta $\beta$<Space><Esc>i
+	autocmd Filetype markdown,rmd inoremap ,lam $\lambda$<Space><Esc>i
+	autocmd Filetype markdown,rmd inoremap ,deg &deg;<Space><Esc>i
 
-""" (Ba)sh
-	autocmd Filetype sh inoremap ,sb #!/bin/sh<Enter>
-	inoremap ,sb #!/bin/sh<Enter>
 
-""" HTML
+" wrap toggle
+setlocal nowrap
+noremap <silent> <Leader>w :call ToggleWrap()<CR>
+function ToggleWrap()
+    if &wrap
+        echo "Wrap OFF"
+        setlocal nowrap
+        set virtualedit=all
+        silent! nunmap <buffer> <Up>
+        silent! nunmap <buffer> <Down>
+        silent! nunmap <buffer> <Home>
+        silent! nunmap <buffer> <End>
+        silent! iunmap <buffer> <Up>
+        silent! iunmap <buffer> <Down>
+        silent! iunmap <buffer> <Home>
+        silent! iunmap <buffer> <End>
+    else
+        echo "Wrap ON"
+        setlocal wrap linebreak nolist
+        set virtualedit=
+        setlocal display+=lastline
+        noremap  <buffer> <silent> <Up>   gk
+        noremap  <buffer> <silent> <Down> gj
+        noremap  <buffer> <silent> <Home> g<Home>
+        noremap  <buffer> <silent> <End>  g<End>
+        inoremap <buffer> <silent> <Up>   <C-o>gk
+        inoremap <buffer> <silent> <Down> <C-o>gj
+        inoremap <buffer> <silent> <Home> <C-o>g<Home>
+        inoremap <buffer> <silent> <End>  <C-o>g<End>
+    endif
+endfunction
+
+" move through split windows
+nmap <leader><Up> :wincmd k<CR>
+nmap <leader><Down> :wincmd j<CR>
+nmap <leader><Left> :wincmd h<CR>
+nmap <leader><Right> :wincmd l<CR>
+
+" move through buffers
+nmap <leader>[ :bp!<CR>
+nmap <leader>] :bn!<CR>
+"nmap <leader>x :bd<CR>
+
+" restore place in file from previous session
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+" tag list
+map <leader>t :TagbarToggle<CR>
+
+" copy, cut and paste
+vmap <C-c> "+y
+vmap <C-x> "+c
+vmap <C-v> c<ESC>"+p
+imap <C-v> <ESC>"+pa
+
+" disable autoindent when pasting text
+" source: https://coderwall.com/p/if9mda/automatically-set-paste-mode-in-vim-when-pasting-in-insert-mode
+let &t_SI .= "\<Esc>[?2004h"
+let &t_EI .= "\<Esc>[?2004l"
+
+function! XTermPasteBegin()
+    set pastetoggle=<Esc>[201~
+    set paste
+    return ""
+endfunction
+
+inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+
+" file browser
+let NERDTreeIgnore = ['\.pyc$', '__pycache__']
+let NERDTreeMinimalUI = 1
+let g:nerdtree_open = 0
+map <leader>t :call NERDTreeToggle()<CR>
+function NERDTreeToggle()
+    NERDTreeTabsToggle
+    if g:nerdtree_open == 1
+        let g:nerdtree_open = 0
+    else
+        let g:nerdtree_open = 1
+        wincmd p
+    endif
+endfunction
+let NERDTreeShowHidden=1
+" NERDTree setting defaults to work around http://github.com/scrooloose/nerdtree/issues/489
+let g:NERDTreeDirArrows = 1
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
+let g:NERDTreeGlyphReadOnly = "RO"
+
+
+set completeopt=menuone,noinsert,noselect
+" Use <Tab> and <S-Tab> to navigate through popup menu
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" run chezmoi apply whenever you save a dotfile #
+autocmd BufWritePost ~/.local/share/chezmoi/* ! chezmoi apply --source-path %
+
+" Hightlight on yank
+" From https://neovim.io/news/2021/07
+au TextYankPost * lua vim.highlight.on_yank {higroup="IncSearch", timeout=150, on_visual=true}
+
+" Set up language servers
+
+" Nicer LSP UI
+nnoremap <silent> gh <cmd>lua require'lspsaga.provider'.lsp_finder()<CR>
+nnoremap <silent> gh :Lspsaga lsp_finder<CR>
+nnoremap <silent> K <cmd>lua require('lspsaga.hover').render_hover_doc()<CR>
+nnoremap <silent>K :Lspsaga hover_doc<CR>
+nnoremap <silent> <C-f> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>
+nnoremap <silent> <C-b> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<CR>
+nnoremap <silent> gs <cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>
+nnoremap <silent> gs :Lspsaga signature_help<CR>
+nnoremap <silent>gr <cmd>lua require('lspsaga.rename').rename()<CR>
+nnoremap <silent>gr :Lspsaga rename<CR>
+nnoremap <silent> gd <cmd>lua require'lspsaga.provider'.preview_definition()<CR>
+nnoremap <silent> gd :Lspsaga preview_definition<CR>
+
+
+"lsp_installer.on_server_ready(function(server)
+
+" COQ completion stuff "
+" This is LSP Installer Stuff "
+lua <<EOF
+-- Automatically start coq
+vim.g.coq_settings = { auto_start = 'shut-up' }
+
+--lsp saga
+local saga = require 'lspsaga'
+saga.init_lsp_saga()
+
+--lsp installer
+local lsp_installer = require("nvim-lsp-installer")
+lsp_installer.on_server_ready(function(server)
+    local opts = {}
+    server:setup(opts)
+end)
+
+
+local nvim_lsp = require('lspconfig')
+local coq = require("coq")
+
+
+-- Enable some language servers with the additional completion capabilities offered by coq_nvim
+local servers = { 'pyright', 'zk', 'ccls', 'tsserver' }
+for _, lsp in ipairs(servers) do
+  nvim_lsp[lsp].setup(require('coq').lsp_ensure_capabilities({
+    on_attach = lsp_on_attach,
+    flags = {debounce_text_changes = 150},
+  }))
+end
+
+EOF
